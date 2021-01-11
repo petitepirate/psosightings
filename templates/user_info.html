@@ -21,12 +21,12 @@
 
   <div class="col-sm-8">               
     <h1 style="text-align: left;">{{user.username}}</h1>
-    <div><p>To search for dayrate information by location please visit the <a href="/home">home tab</a></p></div>
+
     <h4> Sightings: on record: {{ user.sightings | length }}</h4>
     <ul>
     {% for sighting in sightings %}
     <li>
-        <p><b>Sighting Species: </b> {{sighting.species}} <a href="/sighting/{{sighting.id}}/editsighting"> <button class="btn btn-info btn-sm py-0" style="font-size: 0.8em;">Edit</button></a> </p>
+        <p><b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} <b>Sighting Location: </b> {{sighting.latitude}}N {{sighting.longitude}}W <b>Number of Individuals: </b> {{sighting.individuals}}<a href="/sighting/{{sighting.id}}/editsighting"> <button class="btn btn-info btn-sm py-0" style="font-size: 0.8em;">Edit</button></a> </p>
         
     </li>
     {% endfor %}

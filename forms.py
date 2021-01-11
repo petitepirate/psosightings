@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, IntegerField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, IntegerField, SelectField, DateField
 from wtforms.validators import DataRequired, Email, Length
 
-SPECIES = [("Lead PAM", "Lead PAM"), ("Lead PSO", "Lead PSO"), ("Lead PSO/PAM", "Lead PSO & PAM Dual Role")]
+SPECIES = [("Sperm Whale", "Sperm Whale"), ("Common Dolphin", "Common Dolphin"), ("Fin Whale", "Fin Whale")]
 
 class NewUserForm(FlaskForm):
     """Form for adding users."""
@@ -21,13 +21,13 @@ class LoginForm(FlaskForm):
 class AddSightingForm(FlaskForm):
     """Form for adding Job History"""
 
-    sighting_num = SelectField('Sighting Number', validators=[DataRequired()])
-    date = SelectField('Date', validators=[DataRequired()])
-    time = IntegerField('UTC Time of Sighting', validators=[DataRequired()])
+    sighting_num = IntegerField('Sighting Number', validators=[DataRequired()])
+    date = StringField('Date', validators=[DataRequired()])
+    time = StringField('UTC Time of Sighting', validators=[DataRequired()])
     latitude = StringField('Latitude', validators=[DataRequired()])
     longitude = StringField('Longitude', validators=[DataRequired()])
-    species = StringField(u'Species', choices=SPECIES)
-    individuals = StringField('Number of Individuals', validators=[DataRequired()])
+    species = SelectField(u'Species', choices=SPECIES)
+    individuals = IntegerField('Number of Individuals', validators=[DataRequired()])
 
 class EditUserForm(FlaskForm):
     """Edit user form."""
@@ -39,13 +39,13 @@ class EditUserForm(FlaskForm):
 
 class EditSightingForm(FlaskForm):
 
-    sighting_num = SelectField('Sighting Number', validators=[DataRequired()])
-    date = SelectField('Date', validators=[DataRequired()])
-    time = IntegerField('UTC Time of Sighting', validators=[DataRequired()])
+    sighting_num = IntegerField('Sighting Number', validators=[DataRequired()])
+    date = StringField('Date', validators=[DataRequired()])
+    time = StringField('UTC Time of Sighting', validators=[DataRequired()])
     latitude = StringField('Latitude', validators=[DataRequired()])
     longitude = StringField('Longitude', validators=[DataRequired()])
-    species = StringField(u'Species', choices=SPECIES)
-    individuals = StringField('Number of Individuals', validators=[DataRequired()])
+    species = SelectField(u'Species', choices=SPECIES)
+    individuals = IntegerField('Number of Individuals', validators=[DataRequired()])
 
 
 

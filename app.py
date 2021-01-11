@@ -49,6 +49,7 @@ def do_logout():
 @app.route("/user/new", methods=["GET"])
 def users_new_form():
     """Show a form to create a new user"""
+    
     form= NewUserForm()
 
     return render_template('new_user.html', form=form)
@@ -121,8 +122,8 @@ def user_page(user_id):
         return redirect("/home")
 
     user = User.query.get_or_404(user_id)
-    sightings = (Sighting.query.filter(Sighting.user_id == user_id).all())
 
+    sightings = Sighting.query.filter(Sighting.user_id == user_id).all()
     return render_template('user_info.html', user=user, sightings=sightings)    
 
 
@@ -168,12 +169,13 @@ def delete_user():
     return redirect("/")
 
 #### HOME ROUTES ####
-# @app.route("/")
-# def enterpage():
-    # data = open('index.html').read()    
-    # return data
+@app.route("/user/<int:user_id>/all")
+def enterpage(user_id):
+    sightings = Sighting.query.all()  
+    user = User.query.get_or_404(user_id) 
+    return render_template('list.html', sightings=sightings, user=user)
 
-@app.route("/home")
+@app.route("/")
 def homepage():
 
     if not g.user:
@@ -182,8 +184,8 @@ def homepage():
 
     return render_template('index.html')
 
-@app.route("/user/<int:user_id>/addjob", methods=["GET"])
-def new_job(user_id):
+@app.route("/user/<int:user_id>/addsighting", methods=["GET"])
+def new_sighting(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/home")
@@ -191,10 +193,10 @@ def new_job(user_id):
     user = User.query.get_or_404(user_id)
     form = AddSightingForm()
 
-    return render_template('add_job.html', user=user, form=form)
+    return render_template('new_sighting.html', user=user, form=form)
 
-@app.route("/user/<int:user_id>/addjob", methods=["POST"])
-def submit_job(user_id):
+@app.route("/user/<int:user_id>/addsighting", methods=["POST"])
+def submit_sighting(user_id):
 
     user = User.query.get_or_404(user_id)
     form = AddSightingForm()
@@ -216,22 +218,22 @@ def submit_job(user_id):
 
         return redirect(f"/user/{user.id}")
     
-    return render_template('add_job.html', form=form)
+    return render_template('new_sighting.html', form=form, user=user)
 
-@app.route("/job/<int:job_id>/editjob", methods=["GET"])
-def edit_job(sighting_id):
+@app.route("/sighting/<int:sighting_id>/editsighting", methods=["GET"])
+def edit_sighting(sighting_id):
     """Show edit form"""
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/home")
 
     sighting = Sighting.query.get_or_404(sighting_id)
-    form = EditJobForm(obj=sighting)
+    form = EditSightingForm(obj=sighting)
     user = User.query.get_or_404(g.user.id)
-    return render_template("edit_job.html", user=user, sighting=sighting, form=form)
+    return render_template("edit_sighting.html", user=user, sighting=sighting, form=form)
 
-@app.route("/job/<int:job_id>/editjob", methods=["POST"])
-def submit_edit_job(sighting_id):
+@app.route("/sighting/<int:sighting_id>/editsighting", methods=["POST"])
+def submit_edit_sighting(sighting_id):
     sighting = Sighting.query.get_or_404(sighting_id)
     form = EditSightingForm()
     user = User.query.get_or_404(g.user.id)
@@ -255,7 +257,7 @@ def submit_edit_job(sighting_id):
 
 
 
-@app.route('/job/<int:job_id>/delete', methods=["POST"])
+@app.route('/sighting/<int:sighting_id>/delete', methods=["POST"])
 def submit_job_edit(sighting_id):
  
     sighting = Sighting.query.get_or_404(sighting_id)

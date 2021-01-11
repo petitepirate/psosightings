@@ -66,13 +66,13 @@ class Sighting(db.Model):
     __tablename__ = 'sightings'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sighting_num = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.Text, nullable=False)
-    time = db.Column(db.Text, nullable=False)
+    sighting_num = db.Column(db.Integer, nullable=True)
+    date = db.Column(db.Text, nullable=True)
+    time = db.Column(db.Text, nullable=True)
     latitude = db.Column(db.Text, nullable=False)
     longitude = db.Column(db.Text, nullable=False)
     species = db.Column(db.Text, nullable=False)
-    individuals = db.Column(db.Text, nullable=False)
+    individuals = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer,
         db.ForeignKey('users.id',  ondelete='cascade')
     )

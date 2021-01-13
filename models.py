@@ -76,5 +76,7 @@ class Sighting(db.Model):
     user_id = db.Column(db.Integer,
         db.ForeignKey('users.id',  ondelete='cascade')
     )
+    # user_name = db.Column(db.String,   ###########ONLY PICK ONE - change all queries using user_id to use user_name
+    #     db.ForeignKey('users.user_name', ondelete='cascade'))
 
     user = db.relationship('User')

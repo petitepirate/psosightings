@@ -12,7 +12,7 @@
     <ul>
     {% for sighting in sightings %}
     <li>
-        <p><b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} <b>Sighting Location: </b> {{sighting.latitude}}N {{sighting.longitude}}W <b>Number of Individuals: </b> {{sighting.individuals}}</p>
+        <p><b>VESSEL: {{sighting.user_name}}</b> - <b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} <b>Sighting Location: </b> {{sighting.latitude}}N {{sighting.longitude}}W <b>Number of Individuals: </b> {{sighting.individuals}}</p>
         
     </li>
     {% endfor %}

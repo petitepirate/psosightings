@@ -17,7 +17,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
-    user_name = db.Column(db.String(20), nullable=False, unique=True)
+    user_name = db.Column(db.Text(20), nullable=False, unique=True)
     email = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     sightings = db.relationship('Sighting')
@@ -73,10 +73,9 @@ class Sighting(db.Model):
     longitude = db.Column(db.Text, nullable=False)
     species = db.Column(db.Text, nullable=False)
     individuals = db.Column(db.Integer, nullable=False)
+ 
     user_id = db.Column(db.Integer,
         db.ForeignKey('users.id',  ondelete='cascade')
     )
-    # user_name = db.Column(db.String,   ###########ONLY PICK ONE - change all queries using user_id to use user_name
-    #     db.ForeignKey('users.user_name', ondelete='cascade'))
 
     user = db.relationship('User')

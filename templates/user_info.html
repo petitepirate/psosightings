@@ -3,39 +3,28 @@
 {% block content %}
 
 
-<div class="user">
-<div class="row" id="user-card">
-    <div class="col-sm-4 justify-content-center">
-        <img src="{{ user.image_url }}" alt="Image for {{ user.user_name }}" id="profile-avatar" >
-        <h4 id="sidebar-username">{{ user.first_name }} {{user.last_name}}</h4>
-        <div class="col-sm" >
-            {% if g.user.id == user.id %}
-            <a href="/user/{{ user.id }}/edit" class="btn btn-info ml-2">Edit Profile</a>
-            <a href="/user/{{ user.id }}/addsighting" class="btn btn-info ml-2">Add Sighting</a>
-            <form method="POST" action="/user/delete" class="form-inline">
-              <button class="btn btn-danger ml-2" >Delete Profile</button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
+<div class="container-fluid">
+  <div>            
+    <h2 style="text-align: center;">Vessel: {{user.user_name}}</h2>
+    <h4 style="text-align: center;"> Sightings on record: {{ user.sightings | length }}</h4>
+    </div> 
+<div>
+        {% if g.user.id == user.id %}
 
-  <div class="col-sm-8">               
-    <h1 style="text-align: left;">{{user.username}}</h1>
+        <a href="/user/{{ user.id }}/addsighting" class="btn btn-info btn-sm btn-block"><button class="btn btn-info btn-block">Add Sighting</button></a>
+        {% endif %}
 
-    <h4> Sightings: on record: {{ user.sightings | length }}</h4>
-    <ul>
-    {% for sighting in sightings %}
-    <li>
-        <p><b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} <b>Sighting Location: </b> {{sighting.latitude}}N {{sighting.longitude}}W <b>Number of Individuals: </b> {{sighting.individuals}}<a href="/sighting/{{sighting.id}}/editsighting"> <button class="btn btn-info btn-sm py-0" style="font-size: 0.8em;">Edit</button></a> </p>
-        
-    </li>
-    {% endfor %}
-    </ul>
-    </div>
-</div>
+      </div>
+ 
 
-<div class="row">
-
+<ul>
+{% for sighting in sightings %}
+<li>
+    <p><b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} UTC <b> Sighting Location: </b> {{sighting.latitude}}°N {{sighting.longitude}}°W <b>Number of Individuals: </b> {{sighting.individuals}}<a href="/sighting/{{sighting.id}}/editsighting"> <button class="btn btn-info btn-sm py-0" style="font-size: 0.8em;">Edit</button></a> </p>
+    
+</li>
+{% endfor %}
+</ul>
 </div>
 </div>
 {% endblock %}

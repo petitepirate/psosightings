@@ -4,15 +4,17 @@
 
 
 
+<div class="container-fluid">
+  <div>               
 
-  <div class="col-sm-8">               
 
-
-    <h4> Sightings: on record: {{ sightings | length }}</h4>
+    <h4 class="text-center"> Project Sightings on record: {{ sightings | length }}</h4>
+  </div>
+  <div>
     <ul>
     {% for sighting in sightings %}
     <li>
-        <p><b>VESSEL: {{sighting.user_name}}</b> - <b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} <b>Sighting Location: </b> {{sighting.latitude}}N {{sighting.longitude}}W <b>Number of Individuals: </b> {{sighting.individuals}}</p>
+        <p><button type="button" class="btn btn-info btn-sm"> {{sighting.user.user_name}} </button> - <b>Sighting Number: </b> {{sighting.sighting_num}} <b>Sighting Species: </b> {{sighting.species}} <b>Date: </b> {{sighting.date}} <b>Time of Sighting: </b> {{sighting.time}} UTC<b> Sighting Location: </b> {{sighting.latitude}}°N {{sighting.longitude}}°W <b>Number of Individuals: </b> {{sighting.individuals}}</p>
         
     </li>
     {% endfor %}
@@ -20,8 +22,5 @@
     </div>
 </div>
 
-<div class="row">
 
-</div>
-</div>
 {% endblock %}

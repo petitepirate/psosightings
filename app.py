@@ -122,8 +122,8 @@ def user_page(user_id):
         return redirect("/home")
 
     user = User.query.get_or_404(user_id)
-
     sightings = Sighting.query.filter(Sighting.user_id == user_id).all()
+
     return render_template('user_info.html', user=user, sightings=sightings)    
 
 
@@ -171,6 +171,10 @@ def delete_user():
 #### HOME ROUTES ####
 @app.route("/user/<int:user_id>/all")
 def enterpage(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     sightings = Sighting.query.all()  
     user = User.query.get_or_404(user_id) 
     return render_template('list.html', sightings=sightings, user=user)
@@ -235,22 +239,22 @@ def edit_sighting(sighting_id):
 @app.route("/sighting/<int:sighting_id>/editsighting", methods=["POST"])
 def submit_edit_sighting(sighting_id):
     sighting = Sighting.query.get_or_404(sighting_id)
-    form = EditSightingForm()
+    form = EditSightingForm(obj=sighting)
     user = User.query.get_or_404(g.user.id)
 
     if form.validate_on_submit():
-        sighting_num = form.sighting_num.data
-        date = form.date.data
-        time = form.time.data
-        latitude = form.latitude.data
-        longitude = form.longitude.data
-        species = form.species.data
-        individuals = form.individuals.data
+        sighting.sighting_num = form.sighting_num.data
+        sighting.date = form.date.data
+        sighting.time = form.time.data
+        sighting.latitude = form.latitude.data
+        sighting.longitude = form.longitude.data
+        sighting.species = form.species.data
+        sighting.individuals = form.individuals.data
         user_id = f"{user.id}"
 
-        sighting= Sighting(sighting_num=sighting_num, date=date, time=time, latitude=latitude, longitude=longitude, species=species, individuals=individuals, user_id=user_id)
+        sighting= Sighting(sighting_num=sighting.sighting_num, date=sighting.date, time=sighting.time, latitude=sighting.latitude, longitude=sighting.longitude, species=sighting.species, individuals=sighting.individuals, user_id=user_id)
 
-        db.session.add(sighting)
+
         db.session.commit()
 
         return redirect(f"/user/{user.id}")

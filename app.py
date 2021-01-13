@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from models import db, connect_db, User, Sighting
 from forms import NewUserForm, LoginForm, AddSightingForm, EditUserForm, EditSightingForm
 from sqlalchemy.exc import IntegrityError
-
+from sqlalchemy import desc
 import os
 import requests
 import pdb
@@ -175,7 +175,8 @@ def enterpage(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    sightings = Sighting.query.all()  
+    sightings = Sighting.query.order_by(Sighting.id.desc()).all()[::]
+    # Sighting.query.all.(order_by(desc(Sighting.id)))  
     user = User.query.get_or_404(user_id) 
     return render_template('list.html', sightings=sightings, user=user)
 

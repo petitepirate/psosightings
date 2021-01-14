@@ -158,6 +158,16 @@ h2 {
 	background-color: rgb(9, 202, 250);
 }
 
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	padding: 2px;
+	margin: 0px;
+	text-align: center;
+}
+
 #advisory {
 	font-size: small;
 }

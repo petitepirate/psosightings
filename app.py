@@ -68,17 +68,15 @@ def add_user():
                 )   
 
             # db.session.add(user)
-            db.session.commit()
-
             # session["user_id"] = user.id
 
         except IntegrityError:
             flash("Username already taken", 'danger')
             return render_template('new_user.html', form=form)
 
-        do_login(user)
 
-        return redirect(f"/user/{user.id}")
+        return redirect(f"/user/{user.id}")  ## CHANGE TO ADMIN ID NUMBER
+
 
     else:
         return render_template('new_user.html', form=form)
@@ -99,6 +97,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.user_name}!", "success")
+
             return redirect(f"/user/{user.id}")
 
         flash("Invalid credentials.", 'danger')
@@ -119,7 +118,7 @@ def logout():
 def user_page(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/home")
+        return redirect("/user/<int:user_id>")
 
     user = User.query.get_or_404(user_id)
     sightings = Sighting.query.filter(Sighting.user_id == user_id).all()
@@ -132,7 +131,8 @@ def edit_user(user_id):
     """Show edit form"""
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/home")
+        return redirect("/user/<int:user_id>")
+
     user = User.query.get(g.user.id)
     form = EditUserForm(obj=user)
 
@@ -142,7 +142,10 @@ def edit_user(user_id):
 @app.route('/user/<int:user_id>/edit', methods=["POST"])
 def submit_edit(user_id):
     """Edit a user"""
-
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/user/<int:user_id>")
+        
     user = User.query.get_or_404(user_id)
     user_name=request.form["user_name"]
     email=request.form["email"]
@@ -159,7 +162,7 @@ def delete_user():
 
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/user/<int:user_id>")
 
     do_logout()
 
@@ -171,9 +174,10 @@ def delete_user():
 #### HOME ROUTES ####
 @app.route("/user/<int:user_id>/all")
 def enterpage(user_id):
+
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/user/<int:user_id>")
 
     sightings = Sighting.query.order_by(Sighting.id.desc()).all()[::]
     # Sighting.query.all.(order_by(desc(Sighting.id)))  
@@ -183,17 +187,15 @@ def enterpage(user_id):
 @app.route("/")
 def homepage():
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/user/login")
 
     return render_template('index.html')
 
 @app.route("/user/<int:user_id>/addsighting", methods=["GET"])
 def new_sighting(user_id):
+
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/home")
+        return redirect("/user/<int:user_id>")
 
     user = User.query.get_or_404(user_id)
     form = AddSightingForm()
@@ -202,6 +204,10 @@ def new_sighting(user_id):
 
 @app.route("/user/<int:user_id>/addsighting", methods=["POST"])
 def submit_sighting(user_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/user/<int:user_id>")
 
     user = User.query.get_or_404(user_id)
     form = AddSightingForm()
@@ -230,7 +236,7 @@ def edit_sighting(sighting_id):
     """Show edit form"""
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/home")
+        return redirect("/user/<int:user_id>")
 
     sighting = Sighting.query.get_or_404(sighting_id)
     form = EditSightingForm(obj=sighting)
@@ -239,6 +245,11 @@ def edit_sighting(sighting_id):
 
 @app.route("/sighting/<int:sighting_id>/editsighting", methods=["POST"])
 def submit_edit_sighting(sighting_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/user/<int:user_id>")
+
     sighting = Sighting.query.get_or_404(sighting_id)
     form = EditSightingForm(obj=sighting)
     user = User.query.get_or_404(g.user.id)
@@ -264,7 +275,11 @@ def submit_edit_sighting(sighting_id):
 
 @app.route('/sighting/<int:sighting_id>/delete', methods=["POST"])
 def submit_job_edit(sighting_id):
- 
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/user/<int:user_id>")
+
     sighting = Sighting.query.get_or_404(sighting_id)
     if sighting.user_id != g.user.id:
         flash("Access unauthorized.", "danger")

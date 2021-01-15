@@ -188,7 +188,7 @@ def enterpage(user_id):
 def homepage():
 
 
-    return render_template('index.html')
+    return redirect("/user/login")
 
 @app.route("/user/<int:user_id>/addsighting", methods=["GET"])
 def new_sighting(user_id):

@@ -159,13 +159,15 @@ h2 {
 }
 
 .footer {
-	position: fixed;
+	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	padding: 2px;
 	margin: 0px;
+	height: 60px;
 	text-align: center;
+	background: rgb(252, 253, 253);
 }
 
 #advisory {

@@ -227,7 +227,7 @@ def submit_sighting(user_id):
         db.session.add(sighting)
         db.session.commit()
 
-        return redirect(f"/user/{user.id}")
+        return redirect(f"/user/{user.id}/all")
     
     return render_template('new_sighting.html', form=form, user=user)
 
@@ -269,7 +269,7 @@ def submit_edit_sighting(sighting_id):
 
         db.session.commit()
 
-        return redirect(f"/user/{user.id}")
+        return redirect(f"/user/{user.id}/all")
 
 
 
@@ -283,7 +283,7 @@ def submit_job_edit(sighting_id):
     sighting = Sighting.query.get_or_404(sighting_id)
     if sighting.user_id != g.user.id:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect(f"/user/{g.user.id}")
 
     db.session.delete(sighting)
     db.session.commit()

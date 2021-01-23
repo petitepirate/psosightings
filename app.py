@@ -3,6 +3,7 @@ from models import db, connect_db, User, Sighting
 from forms import NewUserForm, LoginForm, AddSightingForm, EditUserForm, EditSightingForm
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import desc
+from flask_mail import Mail, Message
 import os
 import requests
 import pdb
@@ -11,6 +12,16 @@ import pdb
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
+app.config.from_object(__name__)
+mail = Mail(app)
+
+
+app.config["MAIL_SERVER"]='smtp.gmail.com'
+app.config["MAIL_PORT"]= 465
+app.config["MAIL_USE_TLS"]= False
+app.config["MAIL_USE_SSL"]= True
+app.config["MAIL_USERNAME"]= 'psosharespace@gmail.com'
+app.config["MAIL_PASSWORD"]= '369842Mny!'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql:///psosightings')
@@ -18,7 +29,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '12345678')
 
-
+mail = Mail(app)
 connect_db(app)
 db.create_all()
 # toolbar = DebugToolbarExtension(app)
@@ -112,6 +123,7 @@ def logout():
     do_logout()
     flash("Goodbye for now!", "success")
     return redirect("/")
+
 
 
 @app.route("/user/<int:user_id>", methods=["GET"])
@@ -227,6 +239,13 @@ def submit_sighting(user_id):
         db.session.add(sighting)
         db.session.commit()
 
+        msg = Message('Hello',
+                    sender= 'psosharespace@gmail.com',
+                    recipients=["wildlife.megan@gmail.com"]
+                    )
+        msg.body=f"TESTING TESTING 123 - {sighting.species} sighted"
+        mail.send(msg)
+
         return redirect(f"/user/{user.id}/all")
     
     return render_template('new_sighting.html', form=form, user=user)
@@ -301,3 +320,6 @@ def add_header(req):
     req.headers["Expires"] = "0"
     req.headers['Cache-Control'] = 'public, max-age=0'
     return req
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -6,7 +6,8 @@ from sqlalchemy import desc
 import os
 import requests
 import pdb
-
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 CURR_USER_KEY = "curr_user"
 
@@ -230,6 +231,19 @@ def submit_sighting(user_id):
         db.session.add(sighting)
         db.session.commit()
 
+        message = Mail(
+        from_email='psosharespace@gmail.com',
+        to_emails='wildlife.megan@gmail.com',
+        subject='New Sighting Submitted',
+        html_content=f"At {sighting.time}, {sighting.user.user_name} observed a {sighting.species} at {sighting.latitude}N, {sighting.longitude}W")
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e.message)
 
         return redirect(f"/user/{user.id}/all")
     

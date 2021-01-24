@@ -212,7 +212,7 @@ def submit_sighting(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/user/<int:user_id>")
-
+    TO_EMAILS= [('msmeganmcmanus@gmail.com', 'Megan McManus'), ('psosharespace@gmail.com', 'Megan McManus2'), ('neilroper15@gmail.com', 'Neil Roper'), ('katiedouglas11@gmail.com', 'Katie Douglas')]
     user = User.query.get_or_404(user_id)
     form = AddSightingForm()
 
@@ -233,7 +233,8 @@ def submit_sighting(user_id):
 
         message = Mail(
         from_email='psosharespace@gmail.com',
-        to_emails=['wildlife.megan@gmail.com', 'msmeganmcmanus@gmail.com', 'psosharespace@gmail.com']
+        to_emails=TO_EMAILS,
+        is_multiple=True, 
         subject=f"New Sighting Submitted by {sighting.user.user_name}",
         html_content=f"At {sighting.time}, {sighting.user.user_name} observed a {sighting.species} at {sighting.latitude}N, {sighting.longitude}W - Date {sighting.date}")
         try:

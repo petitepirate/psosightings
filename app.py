@@ -233,7 +233,7 @@ def submit_sighting(user_id):
 
         message = Mail(
         from_email='psosharespace@gmail.com',
-        to_emails='wildlife.megan@gmail.com, msmeganmcmanus@gmail.com',
+        to_emails='wildlife.megan@gmail.com; msmeganmcmanus@gmail.com'; 'psosharespace@gmail.com',
         subject=f"New Sighting Submitted by {sighting.user.user_name}",
         html_content=f"At {sighting.time}, {sighting.user.user_name} observed a {sighting.species} at {sighting.latitude}N, {sighting.longitude}W - Date {sighting.date}")
         try:
